@@ -218,15 +218,12 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
 
-This project is open source and available under the [MIT License](LICENSE).
-
-## 💖 Support
+##  Support
 
 If you find this project helpful, please give it a ⭐ on GitHub!
 
 ---
 
-**Built with ❤️ by Aniket Gautam
+**Built by Aniket Gautam
 
