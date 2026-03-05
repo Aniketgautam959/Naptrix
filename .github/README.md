@@ -7,37 +7,37 @@ A modern sleep tracking web application built with Next.js 15, featuring real-ti
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.1-38B2AC?style=for-the-badge&logo=tailwind-css)
 
-## ✨ Features
+##  Features
 
-### 📊 Sleep Analytics
+### Sleep Analytics
 
 - **Sleep Duration Tracking**: Record and monitor your daily sleep hours
 - **Visual Charts**: Beautiful data visualizations using Chart.js
 - **Best & Worst Sleep Analysis**: Track your sleep patterns and extremes
 - **Average Sleep Calculation**: Get insights into your sleep habits
 
-### 💼 Core Functionality
+### Core Functionality
 
 - **Sleep Record Management**: Add, edit, and delete sleep entries with ease
 - **Real-time Statistics**: Comprehensive sleep analytics dashboard
 - **Sleep History**: Complete sleep record history with search and filter
 - **Date-based Tracking**: Track sleep patterns over time
 
-### 🎨 Modern UI/UX
+### Modern UI/UX
 
 - **Fully Responsive**: Optimized for all screen sizes and devices
 - **Beautiful Animations**: Smooth interactions and hover effects
 - **Gradient Designs**: Modern card layouts with backdrop blur effects
 - **Clean Interface**: Intuitive design focused on sleep data visualization
 
-### 🔐 Authentication & Security
+### Authentication & Security
 
 - **Multiple Login Options**: Google, GitHub, Facebook, or email/password
 - **Secure Sessions**: Managed by Clerk authentication
 - **User Profiles**: Personalized dashboards with user information
 - **Protected Routes**: Secure access to sleep data
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 
@@ -157,7 +157,7 @@ model Record {
 }
 ```
 
-## 🎯 Key Features Walkthrough
+## Key Features Walkthrough
 
 ### 1. Sleep Record Management
 
@@ -187,7 +187,7 @@ model Record {
 - Time-based sleep pattern analysis
 - Export and share capabilities
 
-## 🌐 Deployment
+## Deployment
 
 ### Deploy on Vercel (Recommended)
 
@@ -197,7 +197,7 @@ model Record {
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/sahandghavidel/sleep-tracker-next)
 
-## 📎 Useful Links
+## Useful Links
 
 - **[Neon Database](https://get.neon.com/0pFcBSF)** - Serverless PostgreSQL
 - **[Clerk Authentication](https://go.clerk.com/WSe7K8F)** - User management
@@ -208,7 +208,7 @@ model Record {
 - **[Prisma Documentation](https://prisma.io)** - Database ORM
 - **[Vercel Platform](https://vercel.com)** - Deployment platform
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
