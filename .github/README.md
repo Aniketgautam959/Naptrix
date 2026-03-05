@@ -62,7 +62,7 @@ A modern sleep tracking web application built with Next.js 15, featuring real-ti
 
 - **[Vercel](https://vercel.com)** - Serverless deployment platform
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
