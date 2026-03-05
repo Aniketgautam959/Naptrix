@@ -11,72 +11,41 @@ import {
   Legend,
 } from 'chart.js';
 
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-// Import the Record type from the types directory
 import { Record } from '@/types/Record';
 
 const BarChart = ({ records }: { records: Record[] }) => {
   if (!records || records.length === 0) {
     return (
-      <div className="flex items-center justify-center h-80 text-slate-500">
-        <div className="text-center">
-          <div className="text-4xl mb-2">📊</div>
-          <p>No data to display</p>
-        </div>
+      <div className='flex items-center justify-center h-full text-slate-400'>
+        <p className='text-sm'>No data to display</p>
       </div>
     );
   }
-  
-  // Prepare data for the chart
+
+  const getColor = (amount: number) => {
+    if (amount < 6) return { bg: 'rgba(15,23,42,0.15)', border: 'rgba(15,23,42,0.5)', hover: 'rgba(15,23,42,0.3)' };
+    if (amount < 7) return { bg: 'rgba(15,23,42,0.3)', border: 'rgba(15,23,42,0.65)', hover: 'rgba(15,23,42,0.45)' };
+    if (amount < 8) return { bg: 'rgba(15,23,42,0.55)', border: 'rgba(15,23,42,0.8)', hover: 'rgba(15,23,42,0.65)' };
+    return { bg: 'rgba(15,23,42,0.85)', border: 'rgba(15,23,42,1)', hover: 'rgba(15,23,42,0.95)' };
+  };
+
   const data = {
     labels: records.map((record) => {
-      const date = typeof record.date === 'string' ? new Date(record.date) : new Date(record.date);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      });
-    }), // Use record dates as labels
+      const date = new Date(record.date);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }),
     datasets: [
       {
-        data: records.map((record) => record.amount), // Use record amounts as data
-        backgroundColor: records.map((record) => {
-          if (record.amount < 6) return 'rgba(239, 68, 68, 0.3)'; // Red for poor sleep
-          if (record.amount < 7) return 'rgba(245, 158, 11, 0.3)'; // Orange for fair sleep
-          if (record.amount < 8) return 'rgba(34, 197, 94, 0.3)'; // Green for good sleep
-          return 'rgba(59, 130, 246, 0.3)'; // Blue for excellent sleep
-        }),
-        borderColor: records.map((record) => {
-          if (record.amount < 6) return 'rgba(239, 68, 68, 1)';
-          if (record.amount < 7) return 'rgba(245, 158, 11, 1)';
-          if (record.amount < 8) return 'rgba(34, 197, 94, 1)';
-          return 'rgba(59, 130, 246, 1)';
-        }),
-        borderWidth: 2,
-        borderRadius: 8, // More rounded bar edges
+        data: records.map((r) => r.amount),
+        backgroundColor: records.map((r) => getColor(r.amount).bg),
+        borderColor: records.map((r) => getColor(r.amount).border),
+        borderWidth: 1,
+        borderRadius: 4,
         borderSkipped: false,
-        hoverBackgroundColor: records.map((record) => {
-          if (record.amount < 6) return 'rgba(239, 68, 68, 0.5)';
-          if (record.amount < 7) return 'rgba(245, 158, 11, 0.5)';
-          if (record.amount < 8) return 'rgba(34, 197, 94, 0.5)';
-          return 'rgba(59, 130, 246, 0.5)';
-        }),
-        hoverBorderColor: records.map((record) => {
-          if (record.amount < 6) return 'rgba(239, 68, 68, 1)';
-          if (record.amount < 7) return 'rgba(245, 158, 11, 1)';
-          if (record.amount < 8) return 'rgba(34, 197, 94, 1)';
-          return 'rgba(59, 130, 246, 1)';
-        }),
-        hoverBorderWidth: 3,
+        hoverBackgroundColor: records.map((r) => getColor(r.amount).hover),
+        hoverBorderColor: records.map((r) => getColor(r.amount).border),
       },
     ],
   };
@@ -85,111 +54,51 @@ const BarChart = ({ records }: { records: Record[] }) => {
     responsive: true,
     maintainAspectRatio: false,
     animation: {
-      duration: 2000,
-      easing: 'easeInOutQuart' as const,
+      duration: 600,
+      easing: 'easeOutQuart' as const,
     },
     plugins: {
-      legend: {
-        display: false, // Remove legend
-      },
-      title: {
-        display: false, // Remove chart title
-      },
+      legend: { display: false },
+      title: { display: false },
       tooltip: {
-        backgroundColor: 'rgba(15, 23, 42, 0.95)',
-        titleColor: '#ffffff',
-        bodyColor: '#ffffff',
-        borderColor: 'rgba(59, 130, 246, 0.3)',
+        backgroundColor: '#0f172a',
+        titleColor: '#f8fafc',
+        bodyColor: '#94a3b8',
+        borderColor: '#1e293b',
         borderWidth: 1,
-        cornerRadius: 12,
+        cornerRadius: 6,
         displayColors: false,
-        titleFont: {
-          size: 14,
-          weight: 600,
-        },
-        bodyFont: {
-          size: 13,
-          weight: 400,
-        },
-        padding: 12,
+        titleFont: { size: 12, weight: 600 as const },
+        bodyFont: { size: 12, weight: 400 as const },
+        padding: 10,
         callbacks: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          title: function(tooltipItems: any[]) {
-            return `Sleep Record - ${tooltipItems[0].label}`;
-          },
+          title: (items: any[]) => items[0].label,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          label: function(context: any) {
-            const hours = context.parsed.y;
-            let quality = '';
-            if (hours < 6) quality = 'Poor';
-            else if (hours < 7) quality = 'Fair';
-            else if (hours < 8) quality = 'Good';
-            else quality = 'Excellent';
-            return `${hours} hours (${quality})`;
+          label: (ctx: any) => {
+            const h = ctx.parsed.y;
+            const q = h < 6 ? 'Poor' : h < 7 ? 'Fair' : h < 8 ? 'Good' : 'Excellent';
+            return `${h}h — ${q}`;
           },
         },
       },
     },
     scales: {
       x: {
-        title: {
-          display: true,
-          text: 'Date',
-          font: {
-            size: 14,
-            weight: 600,
-          },
-          color: '#475569',
-        },
-        ticks: {
-          font: {
-            size: 12,
-            weight: 500,
-          },
-          color: '#64748b',
-          maxRotation: 45,
-        },
-        grid: {
-          display: false, // Hide x-axis grid lines
-        },
-        border: {
-          display: false,
-        },
+        ticks: { font: { size: 11 }, color: '#94a3b8' },
+        grid: { display: false },
+        border: { display: false },
       },
       y: {
-        title: {
-          display: true,
-          text: 'Hours Slept',
-          font: {
-            size: 14,
-            weight: 600,
-          },
-          color: '#475569',
-        },
-        ticks: {
-          font: {
-            size: 12,
-            weight: 500,
-          },
-          color: '#64748b',
-          stepSize: 1,
-        },
-        grid: {
-          color: 'rgba(148, 163, 184, 0.1)',
-          lineWidth: 1,
-        },
-        border: {
-          display: false,
-        },
+        ticks: { font: { size: 11 }, color: '#94a3b8', stepSize: 2 },
+        grid: { color: 'rgba(148,163,184,0.08)' },
+        border: { display: false },
         suggestedMin: 0,
         suggestedMax: 12,
         beginAtZero: true,
       },
     },
-    interaction: {
-      intersect: false,
-      mode: 'index' as const,
-    },
+    interaction: { intersect: false, mode: 'index' as const },
   };
 
   return <Bar data={data} options={options} />;

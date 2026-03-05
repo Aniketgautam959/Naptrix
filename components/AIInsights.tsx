@@ -14,7 +14,7 @@ export default function AIInsights({ className = '' }: AIInsightsProps) {
   const fetchInsights = async () => {
     setLoading(true);
     setError('');
-    
+
     try {
       const result = await getAIInsights();
       if (result.error) {
@@ -33,6 +33,14 @@ export default function AIInsights({ className = '' }: AIInsightsProps) {
     fetchInsights();
   }, []);
 
+  // Parse **bold** markdown into <strong> elements
+  const renderLine = (text: string) => {
+    const parts = text.split(/\*\*(.*?)\*\*/g);
+    return parts.map((part, i) =>
+      i % 2 === 1 ? <strong key={i} className="font-semibold text-slate-900">{part}</strong> : part
+    );
+  };
+
   return (
     <div className={`bg-white border border-slate-200 rounded-2xl shadow-sm p-6 h-full min-h-[400px] ${className}`}>
       <div className="relative">
@@ -44,7 +52,7 @@ export default function AIInsights({ className = '' }: AIInsightsProps) {
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
             </div>
             <div>
@@ -54,7 +62,7 @@ export default function AIInsights({ className = '' }: AIInsightsProps) {
               <p className="text-sm text-slate-600">Personalized recommendations</p>
             </div>
           </div>
-          
+
           <button
             onClick={fetchInsights}
             disabled={loading}
@@ -93,7 +101,7 @@ export default function AIInsights({ className = '' }: AIInsightsProps) {
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                   </svg>
                 </div>
                 <div>
@@ -128,7 +136,7 @@ export default function AIInsights({ className = '' }: AIInsightsProps) {
                         {line.match(/^\d+\./)?.[0] || '•'}
                       </span>
                       <span className="text-slate-700 text-sm leading-relaxed">
-                        {line.replace(/^\d+\.\s*/, '')}
+                        {renderLine(line.replace(/^\d+\.\s*/, ''))}
                       </span>
                     </div>
                   );
@@ -145,7 +153,7 @@ export default function AIInsights({ className = '' }: AIInsightsProps) {
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
               </div>
               <p className="text-slate-600 font-medium">No insights available</p>

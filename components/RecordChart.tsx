@@ -1,65 +1,51 @@
 import getRecords from '@/app/actions/getRecords';
-import BarChart from './BarChart'; // Ensure BarChart.tsx or BarChart.jsx exists in the same directory
+import BarChart from './BarChart';
 
 const RecordChart = async () => {
   const { records, error } = await getRecords();
 
   if (error) {
     return (
-      <div className='bg-red-100 text-red-800 border border-red-300 rounded-md p-4 text-center'>
-        <p>Error: {error}</p>
+      <div className='bg-white border border-slate-100 rounded-xl p-6'>
+        <p className='text-sm text-red-500'>Error loading records: {error}</p>
       </div>
     );
   }
 
   if (!records || records.length === 0) {
     return (
-      <div className='bg-white border border-slate-200 rounded-2xl shadow-sm p-8'>
-        <div className='text-center py-12'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-2xl flex items-center justify-center border border-slate-200'>
-            <svg
-              className='w-8 h-8 text-slate-800'
-              fill='currentColor'
-              viewBox='0 0 24 24'
-            >
-              <path d='M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z'/>
-            </svg>
-          </div>
-          <h3 className='text-3xl font-bold text-slate-800 mb-4'>
-            No Sleep Records Found
-          </h3>
-          <p className='text-slate-600'>
-            Start tracking your sleep to see your records here.
-          </p>
+      <div className='bg-white border border-slate-100 rounded-xl p-8'>
+        <div className='py-12 text-center'>
+          <p className='text-sm font-medium text-slate-400'>No sleep records yet</p>
+          <p className='text-sm text-slate-400 mt-1'>Add your first record to see the chart.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className='bg-white border border-slate-200 rounded-2xl shadow-sm p-8'>
-      <div className='flex items-center justify-between mb-8'>
+    <div className='bg-white border border-slate-100 rounded-xl p-6'>
+      <div className='flex items-start justify-between mb-6'>
         <div>
-          <h3 className='text-3xl font-bold text-slate-800'>
-            Sleep Records Chart
-          </h3>
-          <p className='text-slate-600 mt-2'>
-            Track your sleep patterns over time
-          </p>
+          <h3 className='text-base font-semibold text-slate-900'>Sleep Records</h3>
+          <p className='text-sm text-slate-400 mt-0.5'>Hours slept per night</p>
         </div>
-        <div className='flex items-center gap-2 text-sm text-slate-500'>
-          <div className='w-3 h-3 bg-red-500 rounded-full'></div>
-          <span>Poor</span>
-          <div className='w-3 h-3 bg-orange-500 rounded-full'></div>
-          <span>Fair</span>
-          <div className='w-3 h-3 bg-green-500 rounded-full'></div>
-          <span>Good</span>
-          <div className='w-3 h-3 bg-blue-500 rounded-full'></div>
-          <span>Excellent</span>
+        <div className='flex items-center gap-4 text-xs text-slate-400'>
+          {[
+            { label: 'Poor', opacity: 'opacity-20' },
+            { label: 'Fair', opacity: 'opacity-40' },
+            { label: 'Good', opacity: 'opacity-70' },
+            { label: 'Excellent', opacity: 'opacity-100' },
+          ].map((item) => (
+            <div key={item.label} className='flex items-center gap-1.5'>
+              <div className={`w-2.5 h-2.5 rounded-sm bg-slate-900 ${item.opacity}`}></div>
+              <span>{item.label}</span>
+            </div>
+          ))}
         </div>
       </div>
-      
-      <div className='h-80'>
+
+      <div className='h-72'>
         <BarChart records={records} />
       </div>
     </div>
