@@ -40,15 +40,15 @@ const Guest = () => {
               {/* Stats */}
               <div className='grid grid-cols-3 gap-6 pt-8 border-t border-slate-100'>
                 <div>
-                  <div className='text-3xl font-bold text-slate-900 tabular-nums'>1K+</div>
+                  <div className='text-3xl font-bold text-slate-900 tabular-nums'>50+</div>
                   <div className='text-sm text-slate-500 mt-1'>Users</div>
                 </div>
                 <div>
-                  <div className='text-3xl font-bold text-slate-900 tabular-nums'>1M+</div>
+                  <div className='text-3xl font-bold text-slate-900 tabular-nums'>600+</div>
                   <div className='text-sm text-slate-500 mt-1'>Hours Tracked</div>
                 </div>
                 <div>
-                  <div className='text-3xl font-bold text-slate-900 tabular-nums'>95%</div>
+                  <div className='text-3xl font-bold text-slate-900 tabular-nums'>88%</div>
                   <div className='text-sm text-slate-500 mt-1'>Satisfaction</div>
                 </div>
               </div>
@@ -168,7 +168,7 @@ const Guest = () => {
           <div className='mb-16'>
             <span className='text-xs font-semibold tracking-widest text-slate-400 uppercase'>Testimonials</span>
             <h2 className='text-4xl font-bold text-slate-900 mt-3'>
-              Loved by Users
+              Loved by Early Users
             </h2>
           </div>
 
@@ -228,7 +228,7 @@ const Guest = () => {
             Ready to Transform Your Sleep?
           </h2>
           <p className='text-slate-400 text-lg mb-10 max-w-xl mx-auto leading-relaxed'>
-            Join thousands of users who have already improved their sleep quality with Naptrix.
+            Join 50+ users who are already improving their sleep quality with Naptrix.
           </p>
           <div className='flex flex-col sm:flex-row gap-3 justify-center'>
             <SignInButton>
