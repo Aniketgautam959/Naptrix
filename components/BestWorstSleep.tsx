@@ -1,46 +1,41 @@
 import getBestWorstSleep from '@/app/actions/getBestWorstSleep';
+import { Card } from '@/components/ui/Card';
 
 const BestWorstSleep = async () => {
   const { bestSleep, worstSleep } = await getBestWorstSleep();
 
   return (
-    <div className='bg-white border border-slate-100 rounded-xl p-6 h-full flex flex-col justify-between'>
-      <p className='text-xs font-semibold tracking-widest text-slate-400 uppercase mb-6'>Best / Worst</p>
-
-      <div className='flex flex-col gap-6'>
+    <Card>
+      <p className='text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3'>
+        Best / Worst
+      </p>
+      <div className='flex items-center gap-5'>
         <div>
-          <p className='text-xs text-slate-400 mb-1'>Best Night</p>
-          <p className='text-4xl font-bold text-slate-900 tabular-nums leading-none'>
+          <p className='text-[10px] text-slate-400 uppercase mb-0.5'>Best</p>
+          <p className='text-3xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums'>
             {bestSleep !== undefined ? (
-              <>
-                {bestSleep}
-                <span className='text-xl font-medium text-slate-400'>h</span>
-              </>
+              <>{bestSleep}<span className='text-sm font-medium text-slate-400'>h</span></>
             ) : (
               <span className='text-slate-300'>--</span>
             )}
           </p>
         </div>
-
-        <div className='h-px bg-slate-100'></div>
-
+        <div className='w-px h-10 bg-slate-100 dark:bg-slate-800' />
         <div>
-          <p className='text-xs text-slate-400 mb-1'>Worst Night</p>
-          <p className='text-4xl font-bold text-slate-900 tabular-nums leading-none'>
+          <p className='text-[10px] text-slate-400 uppercase mb-0.5'>Worst</p>
+          <p className='text-3xl font-bold text-red-500 dark:text-red-400 tabular-nums'>
             {worstSleep !== undefined ? (
-              <>
-                {worstSleep}
-                <span className='text-xl font-medium text-slate-400'>h</span>
-              </>
+              <>{worstSleep}<span className='text-sm font-medium text-slate-400'>h</span></>
             ) : (
               <span className='text-slate-300'>--</span>
             )}
           </p>
         </div>
       </div>
-
-      <p className='text-sm text-slate-400 mt-6'>From all tracked records</p>
-    </div>
+      <p className='text-xs text-slate-400 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800'>
+        All time
+      </p>
+    </Card>
   );
 };
 

@@ -22,6 +22,19 @@
   --radius: 0.75rem;
 }
 
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --accent: #1e293b;
+  --accent-foreground: #f1f5f9;
+  --secondary: #1e293b;
+  --secondary-foreground: #f1f5f9;
+  color-scheme: dark;
+}
+
 /* Force text colors to use CSS variables */
 body {
   color: var(--foreground);
@@ -45,21 +58,6 @@ textarea,
 select {
   color: inherit;
 }
-
-/* Override any hardcoded text colors - commented out to test */
-/* .text-slate-800,
-.text-slate-700,
-.text-slate-600,
-.text-gray-800,
-.text-gray-700,
-.text-gray-600 {
-  color: var(--foreground);
-}
-
-.text-slate-500,
-.text-gray-500 {
-  color: var(--muted-foreground);
-} */
 
 * {
   box-sizing: border-box;
@@ -193,19 +191,19 @@ body {
 /* Custom components */
 @layer components {
   .btn-primary {
-    @apply bg-slate-900 hover:bg-slate-800 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-150 text-sm;
+    @apply bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-150 text-sm;
   }
 
   .btn-secondary {
-    @apply bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-800 font-medium px-6 py-3 rounded-lg transition-colors duration-150 text-sm;
+    @apply bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 text-slate-800 dark:text-slate-200 font-medium px-6 py-3 rounded-lg transition-colors duration-150 text-sm;
   }
 
   .btn-ghost {
-    @apply text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium px-4 py-2 rounded-lg transition-colors duration-150;
+    @apply text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium px-4 py-2 rounded-lg transition-colors duration-150;
   }
 
   .card {
-    @apply bg-white border border-slate-100 rounded-xl hover:border-slate-200 transition-colors duration-150;
+    @apply bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl hover:border-slate-200 dark:hover:border-slate-600 transition-colors duration-150;
   }
 
   .animate-fade-in-up {
@@ -225,7 +223,7 @@ body {
   }
 
   .input {
-    @apply flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-10 w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm ring-offset-white dark:ring-offset-slate-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 dark:placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 dark:focus-visible:ring-slate-300 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .label {
@@ -272,5 +270,99 @@ body {
     cursor: pointer;
     border: 2px solid var(--background);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Dark mode overrides — must live after @tailwind utilities to take effect */
+@layer utilities {
+  .dark .bg-white {
+    @apply !bg-slate-900;
+  }
+
+  .dark .bg-slate-50 {
+    @apply !bg-slate-800/60;
+  }
+
+  .dark .bg-slate-50\/50 {
+    @apply !bg-slate-800/30;
+  }
+
+  .dark .bg-slate-100 {
+    @apply !bg-slate-800;
+  }
+
+  .dark .text-slate-900,
+  .dark .text-slate-800,
+  .dark .text-slate-700 {
+    @apply !text-slate-100;
+  }
+
+  .dark .text-slate-600,
+  .dark .text-slate-500 {
+    @apply !text-slate-400;
+  }
+
+  .dark .border-slate-100,
+  .dark .border-slate-200,
+  .dark .border-slate-300 {
+    @apply !border-slate-700;
+  }
+
+  .dark .hover\:bg-slate-50:hover {
+    @apply !bg-slate-800;
+  }
+
+  .dark .hover\:bg-slate-100:hover {
+    @apply !bg-slate-700;
+  }
+
+  .dark .hover\:bg-slate-50\/60:hover {
+    @apply !bg-slate-700/60;
+  }
+
+  .dark .shadow-xl {
+    @apply !shadow-none;
+  }
+
+  .dark .shadow-lg {
+    @apply !shadow-none;
+  }
+
+  .dark .bg-gray-100,
+  .dark .bg-gray-50 {
+    @apply !bg-slate-800/60;
+  }
+
+  .dark .text-gray-800,
+  .dark .text-gray-700,
+  .dark .text-gray-600 {
+    @apply !text-slate-100;
+  }
+
+  .dark .text-gray-500,
+  .dark .text-gray-400 {
+    @apply !text-slate-400;
+  }
+
+  .dark .border-gray-200,
+  .dark .border-gray-300 {
+    @apply !border-slate-700;
+  }
+
+  .dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]),
+  .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+    @apply !border-slate-700;
+  }
+
+  .dark .bg-blue-50 {
+    @apply !bg-slate-800/60;
+  }
+
+  .dark .border-blue-200 {
+    @apply !border-slate-700;
+  }
+
+  .dark .text-blue-600 {
+    @apply !text-blue-400;
   }
 }

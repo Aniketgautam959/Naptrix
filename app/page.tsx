@@ -6,11 +6,12 @@ import BestWorstSleep from '@/components/BestWorstSleep';
 import Guest from '@/components/Guest';
 import RecordChart from '@/components/RecordChart';
 import RecordHistory from '@/components/RecordHistory';
+import SleepGoalStreak from '@/components/SleepGoalStreak';
 import getRecords from '@/app/actions/getRecords';
+import { getSleepStats } from '@/app/actions/getSleepStats';
 import { currentUser } from '@clerk/nextjs/server';
 import Image from 'next/image';
 
-// Force dynamic rendering since we use currentUser()
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
@@ -20,66 +21,88 @@ export default async function HomePage() {
     user = await currentUser();
   } catch (error) {
     console.error('Error fetching user:', error);
-    // If there's an error with Clerk, show guest view
     return <Guest />;
   }
 
-  if (!user) {
-    return <Guest />;
-  }
+  if (!user) return <Guest />;
 
-  // Fetch records server-side so client components don't need auth context
-  const { records = [] } = await getRecords();
+  const [{ records = [] }, stats] = await Promise.all([
+    getRecords(),
+    getSleepStats(),
+  ]);
+
+  const hasStats = stats && !('error' in stats);
 
   return (
-    <main className='bg-slate-50 min-h-screen'>
-      <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10'>
-        {/* Welcome Header */}
-        <div className='flex items-center gap-4 mb-10 pb-8 border-b border-slate-100'>
-          <Image
-            src={user.imageUrl}
-            alt={`${user.firstName}'s profile`}
-            width={48}
-            height={48}
-            className='w-12 h-12 rounded-full border border-slate-200'
-          />
-          <div className='flex-1'>
-            <h1 className='text-2xl font-bold text-slate-900 tracking-tight'>
-              Welcome back, {user.firstName}
-            </h1>
-            <p className='text-sm text-slate-400 mt-0.5'>
-              Track your sleep patterns and improve your rest quality.
-            </p>
+    <main className='bg-slate-50 dark:bg-slate-950 min-h-screen'>
+      <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-5'>
+        {/* Header */}
+        <div className='flex items-center justify-between gap-4'>
+          <div className='flex items-center gap-3'>
+            <Image
+              src={user.imageUrl}
+              alt={`${user.firstName}'s profile`}
+              width={40}
+              height={40}
+              className='w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700'
+            />
+            <div>
+              <h1 className='text-lg font-semibold text-slate-900 dark:text-slate-100'>
+                {user.firstName}&apos;s Sleep
+              </h1>
+              <p className='text-xs text-slate-400'>Dashboard overview</p>
+            </div>
           </div>
-          <div className='hidden sm:flex items-center gap-6 text-xs text-slate-400'>
-            <span>Joined {new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-            <span className='w-px h-3 bg-slate-200'></span>
-            <span>Active {user.lastActiveAt ? new Date(user.lastActiveAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Recently'}</span>
+
+          {hasStats && (
+            <div className='hidden sm:flex items-center gap-2'>
+              <span className='text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-full'>
+                {stats.totalRecords} records
+              </span>
+              {stats.streak > 0 && (
+                <span className='text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/50 dark:border-emerald-800/50 px-2.5 py-1 rounded-full'>
+                  {stats.streak}d streak
+                </span>
+              )}
+              <span className='text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-full'>
+                {stats.progress.percentage}% on goal
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Stats row — 3 compact cards */}
+        {hasStats && (
+          <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
+            <SleepGoalStreak
+              goal={stats.goal}
+              streak={stats.streak}
+              progress={stats.progress}
+              sleepDebt={stats.sleepDebt}
+            />
+            <AverageSleep />
+            <BestWorstSleep />
+          </div>
+        )}
+
+        {/* AI Insights — full width, separate row */}
+        <AIInsights />
+
+        {/* Chart + Form */}
+        <div className='grid grid-cols-1 lg:grid-cols-5 gap-4'>
+          <div className='lg:col-span-3'>
+            <RecordChart />
+          </div>
+          <div className='lg:col-span-2'>
+            <AddNewRecord />
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className='space-y-6'>
-          <RecordChart />
-          <AddNewRecord />
+        {/* Analytics */}
+        <AdvancedAnalytics records={records} />
 
-          {/* Stats Row */}
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-            <div className='min-h-[220px]'><AverageSleep /></div>
-            <div className='min-h-[220px]'><BestWorstSleep /></div>
-            <div className='md:col-span-2 lg:col-span-1 min-h-[220px]'><AIInsights /></div>
-          </div>
-        </div>
-
-        {/* Advanced Analytics */}
-        <div className='mt-6'>
-          <AdvancedAnalytics records={records} />
-        </div>
-
-        {/* Sleep History */}
-        <div className='mt-6'>
-          <RecordHistory />
-        </div>
+        {/* History */}
+        <RecordHistory />
       </div>
     </main>
   );

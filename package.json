@@ -9,6 +9,8 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "audit": "npm audit",
@@ -24,6 +26,7 @@
     "chart.js": "^4.4.9",
     "dotenv": "^17.2.3",
     "next": "15.5.12",
+    "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0"
@@ -43,6 +46,7 @@
     "prettier": "^3.3.3",
     "prisma": "^6.17.1",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.8"
   }
 }

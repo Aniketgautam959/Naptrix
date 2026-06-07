@@ -154,59 +154,38 @@ const SleepTrendAnalysis = ({ records }: SleepTrendAnalysisProps) => {
 
   if (records.length === 0) {
     return (
-      <div className="relative overflow-hidden bg-white backdrop-blur-xl border border-slate-200 rounded-3xl shadow-xl p-8 text-center group">
-        <div className="absolute inset-0 bg-slate-50/50"></div>
-        <div className="relative">
-          <div className="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-2xl flex items-center justify-center border border-slate-200">
-            <svg className="w-8 h-8 text-slate-800" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
-            </svg>
-          </div>
-          <h3 className="text-xl font-bold text-slate-800 mb-2">No Data for Analysis</h3>
-          <p className="text-slate-600">Add more sleep records to see trend analysis</p>
-        </div>
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-8 text-center">
+          <p className="text-sm text-slate-400">Add more records to see trend analysis</p>
       </div>
     );
   }
 
   return (
-    <div className="relative overflow-hidden bg-white backdrop-blur-xl border border-slate-200 rounded-3xl shadow-xl group">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-slate-50/50"></div>
-      
-      <div className="relative p-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center border border-slate-200 group-hover:scale-110 transition-transform duration-300">
-              <svg className="w-6 h-6 text-slate-800" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold text-slate-800">Sleep Trend Analysis</h3>
-              <p className="text-slate-600">Track your sleep patterns over time</p>
-            </div>
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Sleep Trends</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Pattern over time</p>
           </div>
           
           {/* Period Toggle */}
-          <div className="flex bg-slate-100 rounded-xl p-1">
+          <div className="flex bg-slate-100 dark:bg-slate-800 rounded-xl p-1">
             <button
               onClick={() => setSelectedPeriod('week')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                 selectedPeriod === 'week'
-                  ? 'bg-white text-slate-800 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-800'
+                  ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
               Weekly
             </button>
             <button
               onClick={() => setSelectedPeriod('month')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                 selectedPeriod === 'month'
-                  ? 'bg-white text-slate-800 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-800'
+                  ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
               Monthly
@@ -216,7 +195,7 @@ const SleepTrendAnalysis = ({ records }: SleepTrendAnalysisProps) => {
 
         {/* Trend Chart */}
         <div className="mb-8">
-          <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-2xl p-6 border border-slate-200 dark:border-slate-700/60">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-lg font-semibold text-slate-800">Sleep Hours Trend</h4>
                 <div className="flex items-center space-x-4 text-sm text-slate-600">
@@ -251,7 +230,7 @@ const SleepTrendAnalysis = ({ records }: SleepTrendAnalysisProps) => {
                 {/* Grid lines */}
                 <div className="absolute inset-0 flex flex-col justify-between">
                   {[0, 1, 2, 3, 4, 5].map((i) => (
-                    <div key={i} className="border-t border-slate-200 opacity-30"></div>
+                    <div key={i} className="border-t border-slate-200 dark:border-slate-600 opacity-30"></div>
                   ))}
                 </div>
                 
@@ -274,7 +253,7 @@ const SleepTrendAnalysis = ({ records }: SleepTrendAnalysisProps) => {
                           style={{ height: `${barHeight}px` }}
                         >
                           {/* Bar value on hover */}
-                          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-slate-800 text-slate-600 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-slate-900 dark:bg-slate-700 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap shadow-lg">
                             {data.averageSleep.toFixed(1)}h
                           </div>
                           
@@ -395,7 +374,6 @@ const SleepTrendAnalysis = ({ records }: SleepTrendAnalysisProps) => {
             </div>
           ))}
         </div>
-      </div>
     </div>
   );
 };

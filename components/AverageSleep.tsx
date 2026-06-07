@@ -1,10 +1,9 @@
-import React from 'react';
 import getUserRecord from '@/app/actions/getUserRecord';
+import { Card } from '@/components/ui/Card';
 
 const AverageSleep = async () => {
   try {
     const { record, daysWithRecords } = await getUserRecord();
-
     const validRecord = record || 0;
     const validDays = daysWithRecords && daysWithRecords > 0 ? daysWithRecords : 1;
     const averageSleep = validRecord / validDays;
@@ -12,30 +11,30 @@ const AverageSleep = async () => {
     const minutes = Math.round((averageSleep - hours) * 60);
 
     return (
-      <div className='bg-white border border-slate-100 rounded-xl p-6 h-full flex flex-col justify-between'>
-        <div>
-          <p className='text-xs font-semibold tracking-widest text-slate-400 uppercase mb-4'>Avg. Duration</p>
-          <p className='text-5xl font-bold text-slate-900 tabular-nums leading-none'>
-            {hours}
-            <span className='text-2xl font-medium text-slate-400'>h </span>
-            {minutes}
-            <span className='text-2xl font-medium text-slate-400'>m</span>
-          </p>
-        </div>
-        <p className='text-sm text-slate-400 mt-6'>
-          Based on {validDays} night{validDays !== 1 ? 's' : ''} of data
+      <Card>
+        <p className='text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3'>
+          Average
         </p>
-      </div>
+        <p className='text-3xl font-bold text-slate-900 dark:text-slate-100 tabular-nums'>
+          {hours}
+          <span className='text-base font-medium text-slate-400'>h </span>
+          {minutes}
+          <span className='text-base font-medium text-slate-400'>m</span>
+        </p>
+        <p className='text-xs text-slate-400 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800'>
+          {validDays} night{validDays !== 1 ? 's' : ''} tracked
+        </p>
+      </Card>
     );
   } catch {
     return (
-      <div className='bg-white border border-slate-100 rounded-xl p-6 h-full flex flex-col justify-between'>
-        <div>
-          <p className='text-xs font-semibold tracking-widest text-slate-400 uppercase mb-4'>Avg. Duration</p>
-          <p className='text-5xl font-bold text-slate-300 tabular-nums leading-none'>--</p>
-        </div>
-        <p className='text-sm text-slate-400 mt-6'>Unable to calculate</p>
-      </div>
+      <Card>
+        <p className='text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3'>
+          Average
+        </p>
+        <p className='text-3xl font-bold text-slate-300 tabular-nums'>--</p>
+        <p className='text-xs text-slate-400 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800'>No data</p>
+      </Card>
     );
   }
 };

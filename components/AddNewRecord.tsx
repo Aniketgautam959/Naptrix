@@ -1,192 +1,129 @@
 'use client';
+
 import { useRef, useState } from 'react';
 import addSleepRecord from '@/app/actions/addSleepRecord';
+import { Card, CardHeader } from '@/components/ui/Card';
+
+const QUALITIES = ['Refreshed', 'Energetic', 'Neutral', 'Tired', 'Exhausted'] as const;
 
 const AddRecord = () => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [amount, setAmount] = useState(6); // Default value for the slider
-  const [alertMessage, setAlertMessage] = useState<string | null>(null); // State for alert message
-  const [alertType, setAlertType] = useState<'success' | 'error' | null>(null); // State for alert type
-  const [isLoading, setIsLoading] = useState(false); // State for loading spinner
-  const [sleepQuality, setSleepQuality] = useState(''); // State for selected sleep quality
+  const [amount, setAmount] = useState(7);
+  const [sleepQuality, setSleepQuality] = useState('');
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [alertType, setAlertType] = useState<'success' | 'error' | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const today = new Date().toISOString().split('T')[0];
 
   const clientAction = async (formData: FormData) => {
-    setIsLoading(true); // Show spinner
-    setAlertMessage(null); // Clear previous messages
+    setIsLoading(true);
+    setAlertMessage(null);
+    formData.set('amount', amount.toString());
+    formData.set('text', sleepQuality);
 
-    formData.set('amount', amount.toString()); // Add the slider value to the form data
-    formData.set('text', sleepQuality); // Add the selected sleep quality to the form data
-
-    const { error } = await addSleepRecord(formData); // Removed `data` since it's unused
+    const { error } = await addSleepRecord(formData);
 
     if (error) {
-      setAlertMessage(`Error: ${error}`);
-      setAlertType('error'); // Set alert type to error
+      setAlertMessage(error);
+      setAlertType('error');
     } else {
-      setAlertMessage('Sleep record added successfully!');
-      setAlertType('success'); // Set alert type to success
+      setAlertMessage('Record saved');
+      setAlertType('success');
       formRef.current?.reset();
-      setAmount(6); // Reset the slider to the default value
-      setSleepQuality(''); // Reset the sleep quality
+      setAmount(7);
+      setSleepQuality('');
     }
-
-    setIsLoading(false); // Hide spinner
+    setIsLoading(false);
   };
 
   return (
-    <div className='bg-white border border-slate-200 rounded-2xl shadow-sm p-8'>
-      <div className='text-center mb-8'>
-        <h3 className='text-3xl font-bold text-slate-800 mb-2'>
-          Track Your Sleep
-        </h3>
-        <p className='text-slate-600'>
-          Log your sleep data and insights
-        </p>
-      </div>
+    <Card padding='lg'>
+      <CardHeader title='Log Sleep' subtitle='Add tonight&apos;s sleep data' />
+
       <form
         ref={formRef}
         onSubmit={(e) => {
           e.preventDefault();
-          const formData = new FormData(formRef.current!);
-          clientAction(formData);
+          clientAction(new FormData(formRef.current!));
         }}
-        className='space-y-6'
+        className='space-y-5'
       >
-        {/* Sleep Quality and Sleep Date */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-          {/* Sleep Quality */}
-          <div className='space-y-2'>
-            <label
-              htmlFor='text'
-              className='text-sm font-semibold text-slate-700 block'
-            >
-              Sleep Quality
-            </label>
-            <select
-              id='text'
-              name='text'
-              value={sleepQuality}
-              onChange={(e) => setSleepQuality(e.target.value)}
-              className='w-full h-12 px-4 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200'
-              required
-            >
-              <option value='' disabled>
-                Select quality...
-              </option>
-              <option value='Refreshed'>Refreshed</option>
-              <option value='Tired'>Tired</option>
-              <option value='Neutral'>Neutral</option>
-              <option value='Exhausted'>Exhausted</option>
-              <option value='Energetic'>Energetic</option>
-            </select>
-          </div>
-
-          {/* Sleep Date */}
-          <div className='space-y-2'>
-            <label
-              htmlFor='date'
-              className='text-sm font-semibold text-slate-700 block'
-            >
-              Sleep Date
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+          <div>
+            <label htmlFor='date' className='text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5 block'>
+              Date
             </label>
             <input
               type='date'
               name='date'
               id='date'
-              className='w-full h-12 px-4 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200'
+              defaultValue={today}
+              className='input h-10'
               required
-              onFocus={(e) => e.target.showPicker()}
             />
           </div>
-        </div>
-
-        {/* Hours Slept */}
-        <div className='space-y-4'>
-          <label
-            htmlFor='amount'
-            className='text-sm font-semibold text-slate-700 block'
-          >
-            Hours Slept
-            <span className='text-xs text-slate-500 ml-2 font-normal'>
-              (0-12 hours in 0.5 increments)
-            </span>
-          </label>
-          <div className='relative'>
+          <div>
+            <label className='text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5 block'>
+              Hours — <span className='text-slate-900 dark:text-slate-100 font-semibold'>{amount}h</span>
+            </label>
             <input
               type='range'
               name='amount'
-              id='amount'
               min='0'
               max='12'
               step='0.5'
               value={amount}
               onChange={(e) => setAmount(parseFloat(e.target.value))}
-              className='w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer slider'
+              className='w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer slider mt-4'
             />
-            <div className='flex justify-between text-xs text-slate-500 mt-2'>
-              <span>0h</span>
-              <span>6h</span>
-              <span>12h</span>
-            </div>
-          </div>
-          <div className='text-center'>
-            <div className='inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-800 rounded-lg font-semibold text-lg'>
-              <span>{amount} hours</span>
-            </div>
           </div>
         </div>
 
-        {/* Submit Button */}
+        <div>
+          <label className='text-xs font-medium text-slate-500 dark:text-slate-400 mb-2 block'>
+            How did you feel?
+          </label>
+          <div className='flex flex-wrap gap-2'>
+            {QUALITIES.map((q) => (
+              <button
+                key={q}
+                type='button'
+                onClick={() => setSleepQuality(q)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                  sleepQuality === q
+                    ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 border-transparent'
+                    : 'bg-transparent text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                }`}
+              >
+                {q}
+              </button>
+            ))}
+          </div>
+          <input type='hidden' name='text' value={sleepQuality} />
+        </div>
+
         <button
           type='submit'
-          className='w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
-          disabled={isLoading}
+          disabled={isLoading || !sleepQuality}
+          className='w-full bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 text-sm font-medium py-2.5 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed'
         >
-          {isLoading ? (
-            <>
-              <svg
-                className='animate-spin h-5 w-5'
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-              >
-                <circle
-                  className='opacity-25'
-                  cx='12'
-                  cy='12'
-                  r='10'
-                  stroke='currentColor'
-                  strokeWidth='4'
-                ></circle>
-                <path
-                  className='opacity-75'
-                  fill='currentColor'
-                  d='M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z'
-                ></path>
-              </svg>
-              <span>Adding...</span>
-            </>
-          ) : (
-            <span>Add Sleep Record</span>
-          )}
+          {isLoading ? 'Saving...' : 'Save Record'}
         </button>
       </form>
 
-      {/* Alert Message */}
       {alertMessage && (
-        <div
-          className={`mt-6 p-4 rounded-xl text-sm font-medium ${
+        <p
+          className={`mt-3 text-xs font-medium ${
             alertType === 'success'
-              ? 'bg-green-50 text-green-800 border border-green-200'
-              : 'bg-red-50 text-red-800 border border-red-200'
+              ? 'text-emerald-600 dark:text-emerald-400'
+              : 'text-red-600 dark:text-red-400'
           }`}
         >
-          <div className='flex items-center gap-2'>
-            {alertMessage}
-          </div>
-        </div>
+          {alertMessage}
+        </p>
       )}
-    </div>
+    </Card>
   );
 };
 
