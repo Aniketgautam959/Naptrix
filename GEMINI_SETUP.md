@@ -48,14 +48,17 @@ The AI Insights component will:
 ## Troubleshooting
 
 ### "Gemini API key not configured" Error
+
 - Make sure you've added the `GEMINI_API_KEY` to your `.env.local` file
 - Restart your development server after adding the key
 
 ### "No sleep records found" Error
+
 - Add some sleep records using the "Add New Record" form
 - Make sure you're logged in and have records in your database
 
 ### "Failed to generate insights" Error
+
 - Check your internet connection
 - Verify your API key is correct
 - Check the browser console for detailed error messages
@@ -63,6 +66,7 @@ The AI Insights component will:
 ## API Usage
 
 The Gemini API is used to:
+
 - Analyze sleep data patterns
 - Generate personalized recommendations
 - Provide actionable sleep improvement tips

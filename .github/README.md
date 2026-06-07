@@ -1,4 +1,4 @@
-#  Naptrix 
+# Naptrix
 
 A modern sleep tracking web application built with Next.js 15, featuring real-time analytics, personalized insights, and comprehensive sleep data visualization.
 
@@ -7,7 +7,7 @@ A modern sleep tracking web application built with Next.js 15, featuring real-ti
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.1-38B2AC?style=for-the-badge&logo=tailwind-css)
 
-##  Features
+## Features
 
 ### Sleep Analytics
 
@@ -218,12 +218,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-
-##  Support
+## Support
 
 If you find this project helpful, please give it a ⭐ on GitHub!
 
 ---
 
-**Built by Aniket Gautam
-
+\*\*Built by Aniket Gautam

@@ -59,6 +59,7 @@ npm run build
 ```
 
 This will:
+
 - Generate Prisma client
 - Push the schema to your database
 - Create the necessary tables
@@ -79,15 +80,19 @@ npm run dev
 ## Common Issues & Solutions
 
 ### Issue: "Database connection failed"
+
 **Solution**: Check your `DATABASE_URL` is correct and the database is accessible
 
 ### Issue: "Clerk authentication error"
+
 **Solution**: Verify your Clerk keys are correct and the application is properly configured
 
 ### Issue: "Prisma client not generated"
+
 **Solution**: Run `npx prisma generate` manually
 
 ### Issue: "Tables don't exist"
+
 **Solution**: Run `npx prisma db push` to create the database schema
 
 ## Quick Start with Neon (Easiest Option)
@@ -104,6 +109,7 @@ npm run dev
 ## Need Help?
 
 If you're still getting errors:
+
 1. Check the terminal/console for specific error messages
 2. Verify all environment variables are set correctly
 3. Ensure your database is accessible

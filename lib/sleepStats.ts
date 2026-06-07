@@ -49,7 +49,7 @@ export function calculateGoalProgress(records: Record[], goalHours: number) {
     return { met: 0, total: 0, percentage: 0 };
   }
 
-  const met = records.filter((r) => r.amount >= goalHours).length;
+  const met = records.filter(r => r.amount >= goalHours).length;
   const total = records.length;
   return {
     met,
@@ -58,13 +58,19 @@ export function calculateGoalProgress(records: Record[], goalHours: number) {
   };
 }
 
-export function calculateSleepDebt(records: Record[], goalHours: number): number {
+export function calculateSleepDebt(
+  records: Record[],
+  goalHours: number
+): number {
   if (records.length === 0) return 0;
 
   const last7 = [...records]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 7);
 
-  const debt = last7.reduce((sum, r) => sum + Math.max(0, goalHours - r.amount), 0);
+  const debt = last7.reduce(
+    (sum, r) => sum + Math.max(0, goalHours - r.amount),
+    0
+  );
   return Math.round(debt * 10) / 10;
 }

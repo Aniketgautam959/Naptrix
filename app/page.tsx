@@ -34,37 +34,37 @@ export default async function HomePage() {
   const hasStats = stats && !('error' in stats);
 
   return (
-    <main className='bg-slate-50 dark:bg-slate-950 min-h-screen'>
-      <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-5'>
+    <main className="bg-slate-50 dark:bg-slate-950 min-h-screen">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-5">
         {/* Header */}
-        <div className='flex items-center justify-between gap-4'>
-          <div className='flex items-center gap-3'>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
             <Image
               src={user.imageUrl}
               alt={`${user.firstName}'s profile`}
               width={40}
               height={40}
-              className='w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700'
+              className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700"
             />
             <div>
-              <h1 className='text-lg font-semibold text-slate-900 dark:text-slate-100'>
+              <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                 {user.firstName}&apos;s Sleep
               </h1>
-              <p className='text-xs text-slate-400'>Dashboard overview</p>
+              <p className="text-xs text-slate-400">Dashboard overview</p>
             </div>
           </div>
 
           {hasStats && (
-            <div className='hidden sm:flex items-center gap-2'>
-              <span className='text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-full'>
+            <div className="hidden sm:flex items-center gap-2">
+              <span className="text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-full">
                 {stats.totalRecords} records
               </span>
               {stats.streak > 0 && (
-                <span className='text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/50 dark:border-emerald-800/50 px-2.5 py-1 rounded-full'>
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/50 dark:border-emerald-800/50 px-2.5 py-1 rounded-full">
                   {stats.streak}d streak
                 </span>
               )}
-              <span className='text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-full'>
+              <span className="text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-full">
                 {stats.progress.percentage}% on goal
               </span>
             </div>
@@ -73,7 +73,7 @@ export default async function HomePage() {
 
         {/* Stats row — 3 compact cards */}
         {hasStats && (
-          <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <SleepGoalStreak
               goal={stats.goal}
               streak={stats.streak}
@@ -89,11 +89,11 @@ export default async function HomePage() {
         <AIInsights />
 
         {/* Chart + Form */}
-        <div className='grid grid-cols-1 lg:grid-cols-5 gap-4'>
-          <div className='lg:col-span-3'>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-3">
             <RecordChart />
           </div>
-          <div className='lg:col-span-2'>
+          <div className="lg:col-span-2">
             <AddNewRecord />
           </div>
         </div>

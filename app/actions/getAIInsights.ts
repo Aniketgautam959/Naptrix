@@ -41,7 +41,9 @@ export async function getAIInsights(force = false): Promise<{
 
     const apiKey = process.env.GEMINI_API_KEY?.trim();
     if (!apiKey || apiKey === 'your_gemini_api_key_here') {
-      return { error: 'AI insights unavailable. Add GEMINI_API_KEY to .env.local' };
+      return {
+        error: 'AI insights unavailable. Add GEMINI_API_KEY to .env.local',
+      };
     }
 
     const { records, error } = await getRecords();
@@ -53,12 +55,13 @@ export async function getAIInsights(force = false): Promise<{
       !force &&
       user.cachedInsights &&
       user.insightsUpdatedAt &&
-      Date.now() - user.insightsUpdatedAt.getTime() < CACHE_HOURS * 60 * 60 * 1000
+      Date.now() - user.insightsUpdatedAt.getTime() <
+        CACHE_HOURS * 60 * 60 * 1000
     ) {
       return { insights: user.cachedInsights, cached: true };
     }
 
-    const sleepData = records.map((record) => ({
+    const sleepData = records.map(record => ({
       date: record.date,
       hours: record.amount,
       quality: record.text || 'No notes',
@@ -66,13 +69,13 @@ export async function getAIInsights(force = false): Promise<{
 
     const totalHours = sleepData.reduce((sum, r) => sum + r.hours, 0);
     const averageHours = totalHours / sleepData.length;
-    const minHours = Math.min(...sleepData.map((r) => r.hours));
-    const maxHours = Math.max(...sleepData.map((r) => r.hours));
+    const minHours = Math.min(...sleepData.map(r => r.hours));
+    const maxHours = Math.max(...sleepData.map(r => r.hours));
 
     const prompt = `Analyze this sleep data and give exactly 4-5 brief, actionable recommendations (1-2 sentences each). Numbered list only, no intro.
 
 Sleep Records (${sleepData.length} entries):
-${sleepData.map((r) => `${new Date(r.date).toLocaleDateString()}: ${r.hours}h, felt ${r.quality}`).join('\n')}
+${sleepData.map(r => `${new Date(r.date).toLocaleDateString()}: ${r.hours}h, felt ${r.quality}`).join('\n')}
 
 Stats: avg ${averageHours.toFixed(1)}h, range ${minHours}-${maxHours}h`;
 
@@ -95,11 +98,17 @@ Stats: avg ${averageHours.toFixed(1)}h, range ${minHours}-${maxHours}h`;
     const message = error instanceof Error ? error.message : String(error);
 
     if (message.includes('API_KEY_INVALID') || message.includes('API key')) {
-      return { error: 'Invalid Gemini API key. Update GEMINI_API_KEY in .env.local and restart the server.' };
+      return {
+        error:
+          'Invalid Gemini API key. Update GEMINI_API_KEY in .env.local and restart the server.',
+      };
     }
 
     if (message.includes('429') || message.includes('quota')) {
-      return { error: 'Gemini API quota exceeded. Wait a minute and try Refresh again.' };
+      return {
+        error:
+          'Gemini API quota exceeded. Wait a minute and try Refresh again.',
+      };
     }
 
     return { error: 'Failed to generate insights. Try Refresh again.' };

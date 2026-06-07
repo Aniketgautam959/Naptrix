@@ -14,20 +14,20 @@ const DataExport = ({ records }: DataExportProps) => {
     if (records.length === 0) return;
 
     setIsExporting(true);
-    
+
     // Prepare CSV data
     const csvHeaders = ['Date', 'Hours Slept', 'Sleep Quality', 'Notes'];
     const csvData = records.map(record => [
       new Date(record.date).toLocaleDateString('en-US'),
       record.amount.toString(),
       record.text || 'No notes',
-      record.text || ''
+      record.text || '',
     ]);
 
     // Create CSV content
     const csvContent = [
       csvHeaders.join(','),
-      ...csvData.map(row => row.map(field => `"${field}"`).join(','))
+      ...csvData.map(row => row.map(field => `"${field}"`).join(',')),
     ].join('\n');
 
     // Create and download file
@@ -35,12 +35,15 @@ const DataExport = ({ records }: DataExportProps) => {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', `sleep-data-${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute(
+      'download',
+      `sleep-data-${new Date().toISOString().split('T')[0]}.csv`
+    );
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     setTimeout(() => setIsExporting(false), 1000);
   };
 
@@ -48,13 +51,13 @@ const DataExport = ({ records }: DataExportProps) => {
     if (records.length === 0) return;
 
     setIsExporting(true);
-    
+
     // Create PDF content
     const generatePDFContent = () => {
       const currentDate = new Date().toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
       });
 
       const totalRecords = records.length;
@@ -126,12 +129,18 @@ const DataExport = ({ records }: DataExportProps) => {
               </tr>
             </thead>
             <tbody>
-              ${records.map(record => {
-                const quality = record.amount >= 8 ? 'Excellent' : 
-                              record.amount >= 7 ? 'Good' : 
-                              record.amount >= 6 ? 'Fair' : 'Poor';
-                const qualityClass = quality.toLowerCase();
-                return `
+              ${records
+                .map(record => {
+                  const quality =
+                    record.amount >= 8
+                      ? 'Excellent'
+                      : record.amount >= 7
+                        ? 'Good'
+                        : record.amount >= 6
+                          ? 'Fair'
+                          : 'Poor';
+                  const qualityClass = quality.toLowerCase();
+                  return `
                   <tr>
                     <td>${new Date(record.date).toLocaleDateString('en-US')}</td>
                     <td>${record.amount} hours</td>
@@ -139,7 +148,8 @@ const DataExport = ({ records }: DataExportProps) => {
                     <td>${record.text || 'No notes'}</td>
                   </tr>
                 `;
-              }).join('')}
+                })
+                .join('')}
             </tbody>
           </table>
           
@@ -159,7 +169,7 @@ const DataExport = ({ records }: DataExportProps) => {
       printWindow.document.write(generatePDFContent());
       printWindow.document.close();
       printWindow.focus();
-      
+
       // Wait for content to load, then print
       setTimeout(() => {
         printWindow.print();
@@ -183,12 +193,20 @@ const DataExport = ({ records }: DataExportProps) => {
     return (
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8 text-center">
         <div className="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-2xl flex items-center justify-center">
-          <svg className="w-8 h-8 text-slate-800" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+          <svg
+            className="w-8 h-8 text-slate-800"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
           </svg>
         </div>
-        <h3 className="text-xl font-bold text-slate-800 mb-2">No Data to Export</h3>
-        <p className="text-slate-600">Add sleep records to enable data export</p>
+        <h3 className="text-xl font-bold text-slate-800 mb-2">
+          No Data to Export
+        </h3>
+        <p className="text-slate-600">
+          Add sleep records to enable data export
+        </p>
       </div>
     );
   }
@@ -199,19 +217,29 @@ const DataExport = ({ records }: DataExportProps) => {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="w-12 h-12 mx-auto mb-4 bg-slate-100 rounded-xl flex items-center justify-center border border-slate-200">
-            <svg className="w-6 h-6 text-slate-800" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+            <svg
+              className="w-6 h-6 text-slate-800"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold text-slate-800 mb-2">Export Sleep Data</h3>
-          <p className="text-slate-600">Download your sleep records in various formats</p>
+          <h3 className="text-2xl font-bold text-slate-800 mb-2">
+            Export Sleep Data
+          </h3>
+          <p className="text-slate-600">
+            Download your sleep records in various formats
+          </p>
         </div>
 
         {/* Export Options */}
         <div className="space-y-6">
           {/* Format Selection */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-3">Choose Export Format:</label>
+            <label className="block text-sm font-medium text-slate-700 mb-3">
+              Choose Export Format:
+            </label>
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => setExportFormat('csv')}
@@ -222,8 +250,12 @@ const DataExport = ({ records }: DataExportProps) => {
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                  <svg
+                    className="w-6 h-6"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
                   </svg>
                   <div className="text-left">
                     <div className="font-semibold">CSV File</div>
@@ -241,8 +273,12 @@ const DataExport = ({ records }: DataExportProps) => {
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                  <svg
+                    className="w-6 h-6"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
                   </svg>
                   <div className="text-left">
                     <div className="font-semibold">PDF Report</div>
@@ -255,22 +291,42 @@ const DataExport = ({ records }: DataExportProps) => {
 
           {/* Data Summary */}
           <div className="bg-slate-50 p-6 rounded-xl">
-            <h4 className="text-lg font-semibold text-slate-800 mb-4">Export Summary</h4>
+            <h4 className="text-lg font-semibold text-slate-800 mb-4">
+              Export Summary
+            </h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
                 <span className="text-slate-600">Total Records:</span>
-                <span className="font-semibold text-slate-800 ml-2">{records.length}</span>
+                <span className="font-semibold text-slate-800 ml-2">
+                  {records.length}
+                </span>
               </div>
               <div>
                 <span className="text-slate-600">Date Range:</span>
                 <span className="font-semibold text-slate-800 ml-2">
-                  {new Date(Math.min(...records.map(r => new Date(r.date).getTime()))).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {new Date(Math.max(...records.map(r => new Date(r.date).getTime()))).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {new Date(
+                    Math.min(...records.map(r => new Date(r.date).getTime()))
+                  ).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                  })}{' '}
+                  -{' '}
+                  {new Date(
+                    Math.max(...records.map(r => new Date(r.date).getTime()))
+                  ).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                  })}
                 </span>
               </div>
               <div>
                 <span className="text-slate-600">Average Sleep:</span>
                 <span className="font-semibold text-slate-800 ml-2">
-                  {(records.reduce((sum, r) => sum + r.amount, 0) / records.length).toFixed(1)}h
+                  {(
+                    records.reduce((sum, r) => sum + r.amount, 0) /
+                    records.length
+                  ).toFixed(1)}
+                  h
                 </span>
               </div>
               <div>
@@ -294,16 +350,35 @@ const DataExport = ({ records }: DataExportProps) => {
           >
             {isExporting ? (
               <div className="flex items-center justify-center space-x-3">
-                <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                <svg
+                  className="animate-spin w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
                 </svg>
                 <span>Exporting...</span>
               </div>
             ) : (
               <div className="flex items-center justify-center space-x-3">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
                 </svg>
                 <span>Export {exportFormat.toUpperCase()}</span>
               </div>

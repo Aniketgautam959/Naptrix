@@ -228,7 +228,6 @@ If you find this project helpful, please give it a ⭐ on GitHub!
 
 ---
 
-**Built by Aniket Gautam
+\*\*Built by Aniket Gautam
 
 _A modern approach to sleep tracking with beautiful data visualization and user-friendly design._
-

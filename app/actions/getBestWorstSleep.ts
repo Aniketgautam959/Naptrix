@@ -24,7 +24,7 @@ async function getBestWorstSleep(): Promise<{
       return { bestSleep: 0, worstSleep: 0 }; // Return 0 if no records exist
     }
 
-    const amounts = records.map((record) => record.amount);
+    const amounts = records.map(record => record.amount);
 
     // Calculate best and worst sleep amounts
     const bestSleep = Math.max(...amounts); // Highest amount

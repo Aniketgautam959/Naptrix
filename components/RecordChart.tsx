@@ -8,7 +8,7 @@ const RecordChart = async () => {
   if (error) {
     return (
       <Card>
-        <p className='text-sm text-red-500'>{error}</p>
+        <p className="text-sm text-red-500">{error}</p>
       </Card>
     );
   }
@@ -16,18 +16,20 @@ const RecordChart = async () => {
   if (!records || records.length === 0) {
     return (
       <Card>
-        <CardHeader title='Sleep Chart' subtitle='Hours per night' />
-        <div className='h-48 flex items-center justify-center'>
-          <p className='text-sm text-slate-400'>Add a record to see your chart</p>
+        <CardHeader title="Sleep Chart" subtitle="Hours per night" />
+        <div className="h-48 flex items-center justify-center">
+          <p className="text-sm text-slate-400">
+            Add a record to see your chart
+          </p>
         </div>
       </Card>
     );
   }
 
   return (
-    <Card padding='lg'>
-      <CardHeader title='Sleep Chart' subtitle='Hours per night' />
-      <div className='h-56'>
+    <Card padding="lg">
+      <CardHeader title="Sleep Chart" subtitle="Hours per night" />
+      <div className="h-56">
         <BarChart records={records} />
       </div>
     </Card>

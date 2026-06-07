@@ -13,16 +13,18 @@ const tabs = [
 ];
 
 const AdvancedAnalytics = ({ records = [] }: { records?: Record[] }) => {
-  const [activeTab, setActiveTab] = useState<'trends' | 'reports' | 'export'>('trends');
+  const [activeTab, setActiveTab] = useState<'trends' | 'reports' | 'export'>(
+    'trends'
+  );
 
   return (
-    <div className='space-y-4'>
-      <div className='flex items-center justify-between'>
-        <h2 className='text-sm font-semibold text-slate-900 dark:text-slate-100'>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
           Analytics
         </h2>
-        <div className='flex gap-1 bg-slate-100 dark:bg-slate-800 rounded-lg p-0.5'>
-          {tabs.map((tab) => (
+        <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 rounded-lg p-0.5">
+          {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
