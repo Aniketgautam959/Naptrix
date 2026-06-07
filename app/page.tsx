@@ -26,16 +26,38 @@ export default async function HomePage() {
 
   if (!user) return <Guest />;
 
-  const [{ records = [] }, stats] = await Promise.all([
-    getRecords(),
-    getSleepStats(),
-  ]);
+  let records: Awaited<ReturnType<typeof getRecords>>['records'] = [];
+  let stats: Awaited<ReturnType<typeof getSleepStats>> = { error: 'Unable to load stats' };
+  let dbError = false;
 
-  const hasStats = stats && !('error' in stats);
+  try {
+    const [recordsResult, statsResult] = await Promise.all([
+      getRecords(),
+      getSleepStats(),
+    ]);
+    records = recordsResult.records ?? [];
+    stats = statsResult;
+    if (recordsResult.error || ('error' in statsResult && statsResult.error)) {
+      dbError = true;
+    }
+  } catch (error) {
+    console.error('Dashboard load failed:', error);
+    dbError = true;
+  }
+
+  const sleepStats = !('error' in stats) ? stats : null;
 
   return (
     <main className="bg-slate-50 dark:bg-slate-950 min-h-screen">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-5">
+        {dbError && (
+          <div className="rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 px-4 py-3 text-sm text-amber-800 dark:text-amber-200">
+            Some data could not be loaded. Check that production{' '}
+            <code className="text-xs">DATABASE_URL</code> is set on Vercel and the
+            database schema is up to date.
+          </div>
+        )}
+
         {/* Header */}
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -54,31 +76,31 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {hasStats && (
+          {sleepStats && (
             <div className="hidden sm:flex items-center gap-2">
               <span className="text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-full">
-                {stats.totalRecords} records
+                {sleepStats.totalRecords} records
               </span>
-              {stats.streak > 0 && (
+              {sleepStats.streak > 0 && (
                 <span className="text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/50 dark:border-emerald-800/50 px-2.5 py-1 rounded-full">
-                  {stats.streak}d streak
+                  {sleepStats.streak}d streak
                 </span>
               )}
               <span className="text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-full">
-                {stats.progress.percentage}% on goal
+                {sleepStats.progress.percentage}% on goal
               </span>
             </div>
           )}
         </div>
 
         {/* Stats row — 3 compact cards */}
-        {hasStats && (
+        {sleepStats && (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <SleepGoalStreak
-              goal={stats.goal}
-              streak={stats.streak}
-              progress={stats.progress}
-              sleepDebt={stats.sleepDebt}
+              goal={sleepStats.goal}
+              streak={sleepStats.streak}
+              progress={sleepStats.progress}
+              sleepDebt={sleepStats.sleepDebt}
             />
             <AverageSleep />
             <BestWorstSleep />
